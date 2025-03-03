@@ -4,6 +4,7 @@ const userSchema = Schema({
     // define the schema for the order collection
     name: String
 
+
 },{
     timestamps: true,
     versionKey: false
