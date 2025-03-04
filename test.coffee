@@ -27,11 +27,11 @@
 // product
 
 {
-    stock:number,
-    price: number,
-    image: string,
-    description: string,
     name: string,
+    description: string,
+    price: number,
+    stock:number,
+    image: string,
     reviews:[
         {
             rating: number,

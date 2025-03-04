@@ -1,5 +1,6 @@
 import {Schema, model} from 'mongoose';
 
+<<<<<<< HEAD
 const userSchema = Schema(
   {
     name: {
@@ -59,6 +60,38 @@ const userSchema = Schema(
   },
   { timestamps: true }
 );
+=======
+const userSchema = Schema({
+    // define the schema for the order collection
+    name: String,
+    email: String,
+    password: String,
+    phone: [],
+    
+    role:{
+        type:String,
+        enum:['admin','user'],
+        default: 'user'
+    },
+    isVerified:Boolean,
+    cart:{
+        items:[
+            {
+                // itemID: {
+                //     type:mongoose.Schema.Types.ObjectId,
+                //     ref:"Product"
+                // },
+                itemID: Number,
+                quantity:Number,
+                itemTotalPrice:Number
+            }
+        ],
+        totalBill:{
+            type: Number,
+            default:0
+        }
+    }
+>>>>>>> 5eb6d545e017b827073d9570987982e3339bc844
 
 // Method to calculate itemTotalPrice and totalBill
 userSchema.methods.updateCartTotals = async function () {
