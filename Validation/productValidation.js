@@ -32,7 +32,27 @@ export const productSchema = joi.object({
         .required()
         .messages({
             "string.pattern.base": "Not valid image format"
-        })
+        }),
     
+    reviews: joi.array()
+        .items(
+            joi.object({
+                rating: joi.number()
+                    .min(0)
+                    .max(5)
+                    .default(0),
 
+                comment: joi.string()
+                    .min(5)
+                    .max(100)
+                    .required(),
+                
+                createdBy: joi.string()
+                    .required()
+                    .messages({
+                        "string.empty":"userID can not be empty",
+                    }) 
+            })
+        )
+    
 })
