@@ -43,11 +43,11 @@ export const userSchema = joi.object({
                 joi.object({
                     itemID: joi.string().required(),
                     quantity: joi.number().min(1).required(),
-                    itemTotalPrice:joi.number().min(0).required()
+                    itemTotalPrice: joi.number().min(0).required()
                 })
             )
             .default([]),
         totalBill: joi.number().default(0)
     })
     
-})
+});

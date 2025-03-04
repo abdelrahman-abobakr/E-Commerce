@@ -62,7 +62,7 @@ const userSchema = Schema(
 );
 =======
 const userSchema = Schema({
-    // define the schema for the order collection
+    // define the schema for the user collection
     name: String,
     email: String,
     password: String,
