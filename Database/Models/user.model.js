@@ -36,10 +36,6 @@ const userSchema = Schema(
             ref: 'Product',
             required: true,
           },
-          price: {
-            type: Number,
-            required: true,
-          },
           quantity: {
             type: Number,
             required: true,
@@ -47,7 +43,6 @@ const userSchema = Schema(
           },
           itemTotalPrice: {
             type: Number,
-            required: true,
           },
         },
       ],
@@ -57,7 +52,7 @@ const userSchema = Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export const userModel = mongoose.model('User', userSchema);
