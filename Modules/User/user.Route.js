@@ -1,9 +1,16 @@
-// import express from "express";
-// import { validateUser } from "../../Middleware/userValidationMiddleware.js";
-// import { signUp } from "./user.controller.js";
+import express from "express";
+import { signUp, signIn, verifyEmail} from "./user.Controller.js";
+import { checkEmail } from "../../Middleware/checkEmail.js";
+import { validateUser} from "../../Middleware/validateUserMiddelware.js"
 
-// const userRoute = express.Router();
+const userRoutes = express.Router();
+
+userRoutes.post("/signup", validateUser, checkEmail, signUp)
+userRoutes.post("/signin", signIn);
+userRoutes.get("/verify/:email", verifyEmail);
+
+export default userRoutes;
 
 
-// userRoute.post("/signup", validateUser, signUp);
-// export default userRoute;
+
+
