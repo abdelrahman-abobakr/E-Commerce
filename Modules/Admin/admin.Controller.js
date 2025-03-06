@@ -11,7 +11,12 @@ const getUsers = catchError(
         }
     }
 )
+const deleteUser = async (req,res) =>{
+    let deletedUser = await userModel.filter(user=>req.params.id != user.id)
+    req.status(201).json({message:"deleted",deletedUser})
+}
 
 export{
-    getUsers
+    getUsers,
+    deleteUser
 }
