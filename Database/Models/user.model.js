@@ -1,6 +1,6 @@
-import {Schema, model} from 'mongoose';
+import mongoose from 'mongoose';
 
-const userSchema = Schema(
+const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -32,7 +32,7 @@ const userSchema = Schema(
       items: [
         {
           productID: {
-            type: mongoose.Schema.Types.ObjectId,
+            type:mongoose.Schema.Types.ObjectId,
             ref: 'Product',
             required: true,
           },

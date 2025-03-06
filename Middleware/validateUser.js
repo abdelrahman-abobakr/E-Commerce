@@ -7,5 +7,5 @@ export const validateUser = (req, res, next) => {
             errors: validation.error.details.map((err) => err.message)
         })
     }
-    next()
+    next();
 }

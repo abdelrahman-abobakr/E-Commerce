@@ -1,7 +1,7 @@
 import express from "express";
-import { signUp, signIn, verifyEmail} from "./user.Controller.js";
+import { signUp, signIn, verifyEmail} from "./user.controller.js";
 import { checkEmail } from "../../Middleware/checkEmail.js";
-import { validateUser} from "../../Middleware/validateUserMiddelware.js"
+import { validateUser} from "../../Middleware/userValidationMiddleware.js"
 
 const userRoutes = express.Router();
 
