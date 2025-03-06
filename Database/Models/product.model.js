@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 
+
 const productSchema = Schema({
     name: {
         type: String,
@@ -16,10 +17,11 @@ const productSchema = Schema({
     stock: {
         type: Number,
         required: [true, "Product stock is required"],
-        min: [0, "Stock must be a positive number"]
+        min: [0, "Stock must be a positive number"],
+        default: 0
     },
     image: {
-        type: Buffer,
+        type: String,
         required: [true, "Product image is required"]
     },
     description: {
@@ -27,26 +29,35 @@ const productSchema = Schema({
         required: [true, "Product description is required"],
         minlength: [6, "Description must be at least 6 characters"],
     },
+
     reviews: [
         {
             rating: {
                 type: Number,
-                min: [1, "Rating must be at least 1"],
-                max: [5, "Rating must be at most 5"]
+                required: true,
+                default: 0
+
             },
             comment: {
                 type: String,
+                required: true
             },
-            createdBy: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-                required: [true, "Review creator is required"]
+            createdBy:{
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+               // required: true 
+                required: false //change it to true when add login part
+                
+
             }
         }
     ]
-}, {
-    timestamps: true,
-    versionKey: false
-});
+
+},
+    {
+        timestamps: true,
+        versionKey: false
+    }
+);
 
 export const productModel = model("Product", productSchema);
