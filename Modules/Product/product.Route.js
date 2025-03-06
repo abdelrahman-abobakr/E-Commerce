@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct } from "./product.Controller.js";
+import { createProduct ,updateProduct,deleteProduct, getProductsByNameOrPrice, getAllProduct, getProductById} from "./product.Controller.js";
 //import verifyToken from "../../Middleware/verifyToken.js"
 
  const productRoutes = express.Router();
@@ -9,18 +9,21 @@ productRoutes.post("/create", createProduct);
 
 
 // productRoutes.get("/product/search/:name", getProductById);
-// productRoutes.get("/product/:id", getProductById);
-// productRoutes.get("/all", getAllProduct);
 
 
-// productRoutes.get("/product/allProducts",getProducts)
 
-// productRoutes.put("/update/:id", updateProduct);
+productRoutes.get("/search",getProductsByNameOrPrice) //url in post man http://localhost:3000/search?keyword=productName&minPrice=10&maxPrice=100
 
-// productRoutes.delete("/delete/:id", deleteProduct);
+productRoutes.get("/product/:id", getProductById);
+productRoutes.get("/all", getAllProduct);
 
 
-//, getProductById, getAllProduct, updateProduct, deleteProduct,getProducts
+ productRoutes.put("/update/:id", updateProduct);
+
+ productRoutes.delete("/delete/:id", deleteProduct);
+
+
+//,,,getProducts
 
 
 export default productRoutes;
