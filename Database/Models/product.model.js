@@ -46,10 +46,8 @@ const productSchema = Schema({
             createdBy:{
                 type: Schema.Types.ObjectId,
                 ref: 'User',
-               // required: true 
-                required: false //change it to true when add login part
-                
-
+                required: true 
+             
             }
         }
     ]

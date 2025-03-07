@@ -21,8 +21,8 @@ const createProduct = async (req, res) => {
                         return res.status(400).json({ message: "Reviews is required" });
         
                 }
-   // const userId = req.user.id;
-   // req.body.createdBy = userId;
+   const userId = req.user.id;
+   req.body.createdBy = userId;
   
     const createProduct = await productModel.insertMany([req.body]);
     res.status(201).json(createProduct);
@@ -55,16 +55,16 @@ const createProduct = async (req, res) => {
         const productId = req.params.id;
         //remove comment from this lines when you add token
     
-        //const userId = req.user.id;
-        //const userRole = req.user.role;
-       // if ( userRole == 'admin') {
+        const userId = req.user.id;
+        const userRole = req.user.role;
+       if ( userRole == 'admin') {
             const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
         
         return res.status(200).json({ message: "Product updated successfully", data: product });
-       // }
-        // else {
-        //     res.status(401).json({ message: "not allowed" });
-        // }
+       }
+        else {
+            res.status(401).json({ message: "not allowed" });
+        }
     } catch (error) {
         console.log(error);
         return res.status(400).json(error.message);
@@ -75,20 +75,20 @@ const createProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     const productId = req.params.id;
      //remove comment from this lines when you add token
-    // const userRole = req.user.role;
+    const userRole = req.user.role;
     const product = await productModel.findOne({ _id: productId });
     //only admin can delete product
-    // if (userRole == 'admin') {
+    if (userRole == 'admin') {
         await productModel.findByIdAndDelete(productId);
         res.status(200).json({ message: "product deleted" });
-    // } else {
-    //     res.status(401).json({ message: "Unauthorized" });
-    // }
+    } else {
+        res.status(401).json({ message: "Unauthorized" });
+    }
 };
 
 const getAllProduct = async (req, res) => {
     const allProduct = await productModel.find()
-    //.populate("createdBy"); //remove comment whene add token
+    .populate("createdBy"); //remove comment whene add token
     res.status(200).json({ message: "done", data: allProduct });
 };
 
@@ -140,7 +140,7 @@ const getProductById = async (req, res) => {
     const productId = req.params.id;
     //console.log(id);
     const product = await productModel.findById({_id:productId})
-    // .populate("createdBy");
+    .populate("createdBy");
     if (product) {
         res.status(200).json({ message: "done", data: product });
     } else {
