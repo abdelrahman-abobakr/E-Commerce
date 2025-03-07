@@ -2,9 +2,22 @@ import { myConnection } from "./Database/dbConnection.js";
 import express from "express";
 // import userRoute from "./Modules/User/user.Route.js";
 
+import session from "express-session";
+import passport from "passport"; 
+import "./Config/passport.js";
+
 const app = express();
 app.use(express.json());
 // app.use(userRoute);
+
+// Session Middleware (required for Passport)
+app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 myConnection;
 
 app.listen(3000, function(){
