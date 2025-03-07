@@ -1,3 +1,4 @@
+import passport from "passport";
 import { userModel } from "../../Database/Models/user.model.js";
 import { sendEmail } from "../../Email/email.js";
 import jwt from "jsonwebtoken";
@@ -48,8 +49,34 @@ const verifyEmail = (req, res) => {
     });
 }
 
-export {
-    signUp,
-    signIn,
-    verifyEmail
-}
+// Google Authentication
+
+const googleAuth = passport.authenticate("google", { scope: ["profile", "email"] });
+
+const googleCallback = catchError(async (req, res) => {
+   
+        const { id, displayName, emails } = req.user;
+        let user = await userModel.findOne({ email: emails[0].value });
+
+        if (!user) {
+            user = await userModel.create({
+                name: displayName,
+                email: emails[0].value,
+                googleId: id,
+                isVerified: false  // User must verify his/her Email
+            });
+
+            sendEmail(user.email); // Send mail to user to verify his/her Email;
+            return res.status(401).json({ message: "Please verify your email first" });
+        }
+
+        if (!user.isVerified) {
+            return res.status(401).json({ message: "Email not verified. Check your inbox." });
+        }
+
+        let token = jwt.sign({ _id: user._id, name: user.name, role: user.role }, "AAAA");
+        res.json({ message: "Login successful", token });
+   
+});
+
+export { signUp, signIn, verifyEmail, googleAuth, googleCallback };
