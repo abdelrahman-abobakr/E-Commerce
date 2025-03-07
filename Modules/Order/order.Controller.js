@@ -1,21 +1,26 @@
 
 import { orderModel } from "../../Database/Models/order.model.js";
+const getUserOrders =async (req,res)=>{
+    const userOrders= await orderModel.find({customerId:req.params.id})
+    res.status(200).json({message:"done",userOrders})
+}
 const getOrders = async (req,res)=>{
     const orders = await orderModel.find()
     res.status(200).json({message:"done",orders})
 }
-const addItems = async (req,res)=>{
-    const items = await orderModel.insertMany(req.body)
-    res.status(201).json({message: "added",items})
+const addOrders = async (req,res)=>{
+    const orders = await orderModel.insertMany(req.body)
+    res.status(201).json({message: "added",orders})
 }
-const deleteItems = async (req,res)=>{
+const deleteOrders = async (req,res)=>{
     
-    const  deleteditem = await orderModel.filter(item => req.params.id!=item.id)
-    res.json({message:"Done" , deleteditem})
+    const  deletedOrder = await orderModel.findByIdAndDelete(req.params.id)
+    res.json({message:"Done" , deletedOrder})
 }
 
 export{
-    addItems ,
-    deleteItems ,
-    getOrders
+    addOrders,
+    deleteOrders ,
+    getOrders,
+    getUserOrders
 }
