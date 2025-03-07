@@ -1,6 +1,7 @@
 import { myConnection } from "./Database/dbConnection.js";
 import express from "express";
-// import userRoute from "./Modules/User/user.Route.js";
+import { userModel } from "./Database/Models/user.model.js";
+import  productRoutes  from "./Modules/Product/product.Route.js";
 
 import session from "express-session";
 import passport from "passport"; 

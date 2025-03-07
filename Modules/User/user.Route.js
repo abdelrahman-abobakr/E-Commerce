@@ -1,10 +1,9 @@
 import express from "express";
 import passport from "passport";
-
 import { signUp, signIn, verifyEmail, googleAuth, googleCallback } from "./user.Controller.js";
-import { checkEmail } from "../../Middleware/checkEmail.js";
-import { validateUser} from "../../Middleware/validateUserMiddelware.js"
 
+import { checkEmail } from "../../Middleware/checkEmail.js";
+import { validateUser} from "../../Middleware/userValidationMiddleware.js"
 import { authenticateUser } from "../../Middleware/authMiddleware.js";
 
 const userRoutes = express.Router();
