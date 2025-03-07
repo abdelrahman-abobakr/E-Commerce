@@ -1,10 +1,7 @@
 import { Schema, model } from "mongoose";
-<<<<<<< HEAD
 import mongoose from "mongoose";
-=======
 
 
->>>>>>> fc7936161618c4beabe7e721a7ba59d7b85d1139
 const productSchema = Schema({
     name: {
         type: String,

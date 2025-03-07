@@ -26,9 +26,6 @@ const addUser = catchError(
 
 export{
     getUsers,
-<<<<<<< HEAD
-    deleteUser
-=======
+    deleteUser,
     addUser
->>>>>>> fc7936161618c4beabe7e721a7ba59d7b85d1139
 }
