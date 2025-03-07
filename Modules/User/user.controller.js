@@ -25,7 +25,7 @@ const signIn = catchError(
                 _id: findUser._id,
                 name: findUser.name,
                 role: findUser.role
-            }, "iti");
+            }, "key");
             console.log(token);
             return res.status(200).json({ message: "Login successful", token });
         } else {
