@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct ,updateProduct,deleteProduct, getProductsByNameOrPrice, getAllProduct, getProductById} from "./product.Controller.js";
+import { createProduct ,updateProduct,deleteProduct, getProductsByNameOrPrice, getAllProduct, getProductById} from "./product.Controller.js"
 import verifyToken from "../../Middleware/verifyToken.js"
 import {validateProduct} from "../../Middleware/productValidationMiddleware.js"
 
@@ -21,3 +21,9 @@ productRoutes.get("/all", getAllProduct);
  productRoutes.delete("/delete/:id", deleteProduct);
 
 export default productRoutes;
+
+
+
+
+
+
