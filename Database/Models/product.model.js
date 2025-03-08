@@ -45,8 +45,7 @@ const productSchema = Schema({
             },
             createdBy:{
                 type: Schema.Types.ObjectId,
-                ref: 'User',
-                required: true 
+                ref: 'User'
              
             }
         }

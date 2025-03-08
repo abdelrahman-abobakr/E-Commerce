@@ -48,10 +48,10 @@ export const productSchema = joi.object({
                     .required(),
                 
                 createdBy: joi.string()
-                    .required()
-                    .messages({
-                        "string.empty":"userID can not be empty",
-                    }) 
+                    // .required()
+                    // .messages({
+                    //     "string.empty":"userID can not be empty",
+                    // }) 
             })
         )
     

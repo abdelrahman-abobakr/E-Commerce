@@ -6,7 +6,11 @@ import mongoose from "mongoose";
 
 
 const createProduct = async (req, res) => {
- 
+
+    req.body.reviews.forEach(review => {
+        review.createdBy = req.user._id;  
+    });
+
     const newProduct = await productModel.insertMany(req.body);
     res.status(201).json({newProduct});
 
