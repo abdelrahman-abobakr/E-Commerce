@@ -10,11 +10,12 @@ import  productRoutes  from "./Modules/Product/product.Route.js";
 import session from "express-session";
 import passport from "passport"; 
 import "./Config/passport.js";
-
 const app = express();
 app.use(express.json());
-app.use(orderRoutes)
 app.use(userRoutes);
+
+app.use(orderRoutes)
+app.use(productRoutes)
 app.use(adminRoutes);
 // app.use(userRoute);
 
