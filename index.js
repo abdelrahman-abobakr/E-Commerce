@@ -22,7 +22,6 @@ app.use(productRoutes);
 app.use(orderRoutes)
 app.use(adminRoutes);
 
-app.use()
 // app.use(userRoute);
 
 // Session Middleware (required for Passport)
