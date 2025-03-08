@@ -45,11 +45,8 @@ const productSchema = Schema({
             },
             createdBy:{
                 type: Schema.Types.ObjectId,
-                ref: 'User',
-               // required: true 
-                required: false //change it to true when add login part
-                
-
+                ref: 'User'
+             
             }
         }
     ]
@@ -62,3 +59,6 @@ const productSchema = Schema({
 );
 
 export const productModel = model("Product", productSchema);
+
+
+

@@ -13,9 +13,9 @@ import "./Config/passport.js";
 const app = express();
 app.use(express.json());
 app.use(userRoutes);
+app.use(productRoutes);
 app.use(orderRoutes)
 app.use(adminRoutes);
-// app.use(userRoute);
 
 // Session Middleware (required for Passport)
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
