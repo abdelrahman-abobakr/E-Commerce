@@ -7,6 +7,7 @@ import { catchError } from "../../Middleware/catchError.js";
 
 const signUp = catchError(
     async (req, res) => {
+        console.log("insidelogin")
         req.body.password = bcrypt.hashSync(req.body.password, 8);
         const addUser = await userModel.insertMany(req.body)
         sendEmail(req.body.email);

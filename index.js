@@ -4,7 +4,6 @@ import { userModel } from "./Database/Models/user.model.js";
 import { orderRoutes } from "./Modules/Order/order.Route.js";
 import userRoutes from "./Modules/User/user.Route.js";
 import adminRoutes from "./Modules/Admin/admin.Route.js";
-
 import  productRoutes  from "./Modules/Product/product.Route.js";
 
 import session from "express-session";
@@ -13,8 +12,8 @@ import "./Config/passport.js";
 
 const app = express();
 app.use(express.json());
-app.use(orderRoutes)
 app.use(userRoutes);
+app.use(orderRoutes)
 app.use(adminRoutes);
 // app.use(userRoute);
 
