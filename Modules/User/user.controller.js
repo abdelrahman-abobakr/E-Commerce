@@ -1,5 +1,6 @@
 import passport from "passport";
 import { userModel } from "../../Database/Models/user.model.js";
+import {productModel} from "../../Database/Models/product.model.js"
 import { sendEmail } from "../../Email/email.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -82,4 +83,35 @@ const googleCallback = catchError(async (req, res) => {
    
 });
 
-export { signUp, signIn, verifyEmail, googleAuth, googleCallback };
+
+const addToCart = async (req,res)=>{
+    const { productID, quantity } = req.body;
+    const user = await userModel.findById(req.user._id);
+
+    const product = await productModel.findById(productID);
+    if (!product || product.stock < quantity) {
+        return res.status(400).json({ message: "Product not available or insufficient stock" });
+    }
+
+    const cartItem = user.cart.items.find(item => item.productID.equals(productID));
+    if (cartItem) {
+        cartItem.quantity += quantity;
+        cartItem.itemTotalPrice = cartItem.quantity * product.price;
+    } else {
+        user.cart.items.push({
+            productID,
+            quantity,
+            itemTotalPrice: quantity * product.price,
+        });
+    }
+
+    // Recalculate total bill
+    user.cart.totalBill = user.cart.items.reduce((total, item) => total + item.itemTotalPrice, 0);
+
+    await user.save();
+    res.status(200).json({ message: "Product added to cart", cart: user.cart });
+}
+
+
+
+export { signUp, signIn, verifyEmail, googleAuth, googleCallback, addToCart };

@@ -3,29 +3,23 @@ import  {productModel } from "../../Database/Models/product.model.js";
 import mongoose from "mongoose";
 
 const createProduct = async (req, res) => {
-
-    req.body.reviews.forEach(review => {
-        review.createdBy = req.user._id;  
-    });
-
+    
+    if(req.body.reviews){
+        req.body.reviews.forEach(review => {
+            review.createdBy = req.user._id;  
+        });
+    }
     const newProduct = await productModel.insertMany(req.body);
     res.status(201).json({newProduct});
-    }
+}
 
 
-    const updateProduct = async (req, res) => {
-      const productId = req.params.id;
-        const userRole = req.user.role;
-        
-       if ( userRole == 'admin') {
-            const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
-        return res.status(200).json({ message: "Product updated successfully", data: product });
-       }
-        else {
-            res.status(401).json({ message: "not allowed" });
-        }
-  
-     };
+const updateProduct = async (req, res) => {
+    const productId = req.params.id;
+    
+    const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
+    return res.status(200).json({ message: "Product updated successfully", data: product });
+};
     
 
 const deleteProduct = async (req, res) => {
