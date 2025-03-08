@@ -8,7 +8,8 @@ import { catchError } from "../../Middleware/catchError.js";
 const signUp = catchError(
     async (req, res) => {
         req.body.password = bcrypt.hashSync(req.body.password, 8);
-        const addUser = await userModel.insertMany(req.body)
+        console.log( req.body.password );
+        const addUser = await userModel.insertMany(req.body);
         sendEmail(req.body.email);
         addUser[0].password = undefined;
         res.status(201).json({ message: "created", addUser });
@@ -21,6 +22,7 @@ const signIn = catchError(
     async (req, res) => {
         // Signin logic here
         let findUser = await userModel.findOne({ email: req.body.email });
+        
         if (findUser && bcrypt.compareSync(req.body.password, findUser.password) && (findUser.isVerified === true)) {
             let token = jwt.sign({
                 _id: findUser._id,

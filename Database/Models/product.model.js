@@ -60,3 +60,6 @@ const productSchema = Schema({
 );
 
 export const productModel = model("Product", productSchema);
+
+
+
