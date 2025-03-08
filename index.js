@@ -4,7 +4,6 @@ import { userModel } from "./Database/Models/user.model.js";
 import { orderRoutes } from "./Modules/Order/order.Route.js";
 import userRoutes from "./Modules/User/user.Route.js";
 import adminRoutes from "./Modules/Admin/admin.Route.js";
-
 import  productRoutes  from "./Modules/Product/product.Route.js";
 
 import session from "express-session";
@@ -14,10 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(userRoutes);
 
+app.use(productRoutes);
 app.use(orderRoutes)
-app.use(productRoutes)
 app.use(adminRoutes);
-// app.use(userRoute);
 
 // Session Middleware (required for Passport)
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));

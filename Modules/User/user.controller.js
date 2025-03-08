@@ -1,5 +1,6 @@
 import passport from "passport";
 import { userModel } from "../../Database/Models/user.model.js";
+import {productModel} from "../../Database/Models/product.model.js"
 import { sendEmail } from "../../Email/email.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -7,8 +8,10 @@ import { catchError } from "../../Middleware/catchError.js";
 
 const signUp = catchError(
     async (req, res) => {
+        console.log("insidelogin")
         req.body.password = bcrypt.hashSync(req.body.password, 8);
-        const addUser = await userModel.insertMany(req.body)
+        console.log( req.body.password );
+        const addUser = await userModel.insertMany(req.body);
         sendEmail(req.body.email);
         addUser[0].password = undefined;
         res.status(201).json({ message: "created", addUser });
@@ -21,6 +24,7 @@ const signIn = catchError(
     async (req, res) => {
         // Signin logic here
         let findUser = await userModel.findOne({ email: req.body.email });
+        
         if (findUser && bcrypt.compareSync(req.body.password, findUser.password) && (findUser.isVerified === true)) {
             let token = jwt.sign({
                 _id: findUser._id,
@@ -79,4 +83,35 @@ const googleCallback = catchError(async (req, res) => {
    
 });
 
-export { signUp, signIn, verifyEmail, googleAuth, googleCallback };
+
+const addToCart = async (req,res)=>{
+    const { productID, quantity } = req.body;
+    const user = await userModel.findById(req.user._id);
+
+    const product = await productModel.findById(productID);
+    if (!product || product.stock < quantity) {
+        return res.status(400).json({ message: "Product not available or insufficient stock" });
+    }
+
+    const cartItem = user.cart.items.find(item => item.productID.equals(productID));
+    if (cartItem) {
+        cartItem.quantity += quantity;
+        cartItem.itemTotalPrice = cartItem.quantity * product.price;
+    } else {
+        user.cart.items.push({
+            productID,
+            quantity,
+            itemTotalPrice: quantity * product.price,
+        });
+    }
+
+    // Recalculate total bill
+    user.cart.totalBill = user.cart.items.reduce((total, item) => total + item.itemTotalPrice, 0);
+
+    await user.save();
+    res.status(200).json({ message: "Product added to cart", cart: user.cart });
+}
+
+
+
+export { signUp, signIn, verifyEmail, googleAuth, googleCallback, addToCart };
