@@ -5,14 +5,14 @@ import { orderRoutes } from "./Modules/Order/order.Route.js";
 import userRoutes from "./Modules/User/user.Route.js";
 import adminRoutes from "./Modules/Admin/admin.Route.js";
 
-
 import  productRoutes  from "./Modules/Product/product.Route.js";
+import paymentRoutes from "./Modules/Payment/payment.Route.js";
 
 import session from "express-session";
 import passport from "passport"; 
 import "./Config/passport.js";
 
-import paymentRoutes from "./Modules/Payment/payment.Route.js";
+
 
 const app = express();
 
