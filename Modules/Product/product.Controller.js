@@ -2,25 +2,18 @@ import jwt from "jsonwebtoken";
 import  {productModel } from "../../Database/Models/product.model.js";
 import mongoose from "mongoose";
 
-
-
-
 const createProduct = async (req, res) => {
- 
     const newProduct = await productModel.insertMany(req.body);
     res.status(201).json({newProduct});
-
     }
 
 
     const updateProduct = async (req, res) => {
-      
-        const productId = req.params.id;
+      const productId = req.params.id;
         const userRole = req.user.role;
         
        if ( userRole == 'admin') {
             const product = await productModel.findByIdAndUpdate(productId, req.body, { new: true });
-        
         return res.status(200).json({ message: "Product updated successfully", data: product });
        }
         else {
@@ -46,8 +39,7 @@ const deleteProduct = async (req, res) => {
 
 const getAllProduct = async (req, res) => {
     const allProduct = await productModel.find()
-      // .populate("createdBy");
-    console.log(allProduct) 
+    //console.log(allProduct) 
     res.status(200).json({ message: "done", data: allProduct });
 };
 
@@ -95,7 +87,6 @@ const getProductsByNameOrPrice = async (req, res) => {
 const getProductById = async (req, res) => {
     const productId = req.params.id;
     const product = await productModel.findById({_id:productId})
-    // .populate("createdBy");
     if (product) {
         res.status(200).json({ message: "done", data: product });
     } else {
@@ -104,18 +95,14 @@ const getProductById = async (req, res) => {
 };
 
 
-
-
 export {
-    createProduct,
+     createProduct,
 
-
-    getProductsByNameOrPrice,
+     getProductsByNameOrPrice,
      getProductById,
      getAllProduct,
-
+ 
      updateProduct,
-
      deleteProduct
 };
 
