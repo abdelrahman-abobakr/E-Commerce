@@ -9,8 +9,8 @@ adminRoutes.use(verifyToken);
 adminRoutes.use(checkAdmin);
 
 adminRoutes.post("/addUser", validateUser, addUser);
-adminRoutes.get("/users", checkAdmin, getUsers);
-adminRoutes.delete("/users/:id", checkAdmin,deleteUser)
+adminRoutes.delete("/deleteUser/:id",deleteUser)
+adminRoutes.get("/users", getUsers);
 
 
 export default adminRoutes;

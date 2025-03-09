@@ -60,7 +60,7 @@ const verifyEmail = (req, res) => {
 
 // Google Authentication
 
-const googleAuth = passport.authenticate("google", { scope: ["profile", "email"] });
+const googleAuth = catchError(passport.authenticate("google", { scope: ["profile", "email"] }));
 
 const googleCallback = catchError(async (req, res) => {
    

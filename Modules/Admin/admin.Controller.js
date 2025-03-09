@@ -12,15 +12,29 @@ const getUsers = catchError(
         }
     }
 )
-const deleteUser = async (req,res) =>{
-    let deletedUser = await userModel.filter(user=>req.params.id != user.id)
-    req.status(201).json({message:"deleted",deletedUser})
-}
 
+const deleteUser = catchError(
+    async (req, res) => {
+        const userId = req.params.id;
+        
+        const user = await userModel.findOne({ _id: userId });
+        if (user) {
+            await userModel.findByIdAndDelete(userId);
+            res.status(200).json({ message: "user deleted" });
+        } else {
+            res.status(401).json({ message: "not found user" });
+        }
+    }
+);
 const addUser = catchError(
     async (req,res)=>{
-        let AddedUser= await userModel.insertMany(req.body);
-        res.json({message: "user added successfully!"});
+        let findUser = await userModel.findOne({ email: req.body.email });
+        if(!findUser){
+            let AddedUser= await userModel.insertMany(req.body);
+            res.json({message: "user added successfully!"});
+        }else{
+            res.json({message:"user already exists!"})
+        }
     }
 )
 
