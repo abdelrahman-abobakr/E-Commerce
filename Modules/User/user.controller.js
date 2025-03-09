@@ -5,7 +5,9 @@ import { sendEmail } from "../../Email/email.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { catchError } from "../../Middleware/catchError.js";
+import stripePackage from 'stripe';
 
+const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 //          Login and Registeration
 
