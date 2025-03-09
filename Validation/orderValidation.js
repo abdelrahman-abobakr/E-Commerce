@@ -1,5 +1,4 @@
 import joi from "joi";
-
 export const orderSchema = joi.object({
     
     customerId: joi.string()
