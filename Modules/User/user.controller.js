@@ -6,11 +6,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { catchError } from "../../Middleware/catchError.js";
 
+
+//          Login and Registeration
+
 const signUp = catchError(
     async (req, res) => {
-        console.log("insidelogin")
         req.body.password = bcrypt.hashSync(req.body.password, 8);
-        console.log( req.body.password );
+        req.body.role = 'user';
         const addUser = await userModel.insertMany(req.body);
         sendEmail(req.body.email);
         addUser[0].password = undefined;
@@ -53,6 +55,7 @@ const verifyEmail = (req, res) => {
     });
 }
 
+
 // Google Authentication
 
 const googleAuth = passport.authenticate("google", { scope: ["profile", "email"] });
@@ -84,34 +87,207 @@ const googleCallback = catchError(async (req, res) => {
 });
 
 
-const addToCart = async (req,res)=>{
+//          Cart
+const addToCart = async (req, res) => {
     const { productID, quantity } = req.body;
     const user = await userModel.findById(req.user._id);
 
     const product = await productModel.findById(productID);
-    if (!product || product.stock < quantity) {
-        return res.status(400).json({ message: "Product not available or insufficient stock" });
+
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
     }
 
     const cartItem = user.cart.items.find(item => item.productID.equals(productID));
+
+    // Calculate the total quantity (existing quantity + new quantity)
+    const totalQuantity = cartItem ? cartItem.quantity + quantity : quantity;
+
+    // Check if the total quantity exceeds the product's stock
+    if (product.stock < totalQuantity) {
+        return res.status(400).json({ message: "Insufficient stock" });
+    }
+
+    // Update or add the product to the cart
     if (cartItem) {
-        cartItem.quantity += quantity;
-        cartItem.itemTotalPrice = cartItem.quantity * product.price;
+        cartItem.quantity = totalQuantity;
+        cartItem.itemTotalPrice = totalQuantity * product.price;
     } else {
         user.cart.items.push({
             productID,
-            quantity,
-            itemTotalPrice: quantity * product.price,
+            quantity: totalQuantity,
+            itemTotalPrice: totalQuantity * product.price,
         });
     }
 
-    // Recalculate total bill
+    // Recalculate the total bill
     user.cart.totalBill = user.cart.items.reduce((total, item) => total + item.itemTotalPrice, 0);
 
+    // Save the updated user document
     await user.save();
+
+    // Return the updated cart
     res.status(200).json({ message: "Product added to cart", cart: user.cart });
-}
+};
+
+const viewCart = catchError(
+    async (req,res)=>{
+
+        let currentUser = await userModel.findById(req.user._id);
+
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        let userCart = await currentUser.cart;
+
+        if(userCart.items.length > 0){
+            res.status(200).json({message: "All Cart Items", userCart});
+        }else{
+            res.json({message:"Empty Cart!"});
+        }
+    }
+);
+
+const updateCartItemQuantity = catchError(
+    async (req, res) => {
+        const  productID  = req.params.productID; 
+        const { quantity } = req.body; 
+
+        const user = await userModel.findById(req.user._id);
+
+        // Find the product in the user's cart
+        const cartItem = user.cart.items.find(item => item.productID.equals(productID));
+
+        // Check if the product exists in the cart
+        if (!cartItem) {
+            return res.status(404).json({ message: "Product not found in cart" });
+        }
+
+        // Find the product in the database to get the price
+        const product = await productModel.findById(productID);
+
+        if (!product || product.stock < quantity) {
+            return res.status(400).json({ message: "Product not available or insufficient stock" });
+        }
+
+        // Update the quantity and itemTotalPrice
+        cartItem.quantity = quantity;
+        cartItem.itemTotalPrice = quantity * product.price;
+        user.cart.totalBill = user.cart.items.reduce((total, item) => total + item.itemTotalPrice, 0);
+
+        // Save the updated user document
+        const updatedCart = await userModel.findByIdAndUpdate(req.user._id, { cart: user.cart }, {new:true});
+
+        // Return the updated cart
+        res.status(200).json({
+            message: "Cart item quantity updated",
+            cart: user.cart
+        });
+    }
+);
+
+const removeFromCart = catchError(
+    async (req, res) => {
+        const productID = req.params.productID;
+
+        const user = await userModel.findById(req.user._id);
+
+        // Find the index of the product in the user's cart
+        const cartItemIndex = user.cart.items.findIndex(item => item.productID.equals(productID));
+
+        // Check if the product exists in the cart
+        if (cartItemIndex === -1) {
+            return res.status(404).json({ message: "Product not found in cart" });
+        }
+
+        // Remove the product from the cart
+        user.cart.items.splice(cartItemIndex, 1);
+
+        // Recalculate the total bill
+        user.cart.totalBill = user.cart.items.reduce((total, item) => total + item.itemTotalPrice, 0);
+
+        // Save the updated user document
+        // await user.save();
+        const updatedCart = await userModel.findByIdAndUpdate(req.user._id, { cart: user.cart }, {new:true});
+
+        // Return the updated cart
+        res.status(200).json({
+            message: "Product removed from cart",
+            cart: user.cart
+        });
+    }
+);
+
+const handlePayment = catchError(
+    async (req, res) => {
+        const user = await userModel.findById(req.user._id);
+    
+        // Check if cart is empty
+        if (user.cart.items.length === 0) {
+            return res.status(400).json({ message: "Cart is empty" });
+        }
+    
+        // Calculate total bill (from user's cart)
+        const totalBill = user.cart.totalBill;
+    
+        // Create a payment session with the payment gateway (Stripe)
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'], // Accept card payments
+            line_items: user.cart.items.map(item => ({
+                price_data: {
+                    currency: 'usd', // Currency
+                    product_data: {
+                        name: item.productID.name, // Product name (fetch from DB)
+                    },
+                    unit_amount: item.itemTotalPrice * 100, // Convert to cents
+                },
+                quantity: item.quantity, // Quantity of the product
+            })),
+            mode: 'payment', // One-time payment
+            success_url: 'https://yourwebsite.com/success', // Redirect on success
+            cancel_url: 'https://yourwebsite.com/cancel', // Redirect on cancel
+        });
+    
+        // On successful payment:
+        // 1. Create an order
+        const order = await orderModel.create({
+            customerId: user._id,
+            items: user.cart.items,
+            totalBill,
+        });
+    
+        // 2. Clear the cart
+        user.cart.items = [];
+        user.cart.totalBill = 0;
+        await user.save();
+    
+        // 3. Update product stock
+        for (const item of user.cart.items) {
+            await productModel.findByIdAndUpdate(item.productID, {
+                $inc: { stock: -item.quantity },
+            });
+        }
+    
+        // Return the payment session URL to the frontend
+        res.status(200).json({ message: "Payment session created", sessionUrl: session.url });
+    }
+)
 
 
 
-export { signUp, signIn, verifyEmail, googleAuth, googleCallback, addToCart };
+export { 
+    signUp, 
+    signIn, 
+    verifyEmail, 
+    googleAuth, 
+    googleCallback, 
+    
+    addToCart,
+    viewCart,
+    updateCartItemQuantity,
+    removeFromCart,
+
+    handlePayment
+
+};

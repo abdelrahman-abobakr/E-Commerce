@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { signUp, signIn, verifyEmail, googleAuth, googleCallback, addToCart } from "./user.controller.js";
+import { signUp, signIn, verifyEmail, googleAuth, googleCallback, addToCart, viewCart, updateCartItemQuantity, removeFromCart, handlePayment } from "./user.controller.js";
 
 import { checkEmail } from "../../Middleware/checkEmail.js";
 import { validateUser} from "../../Middleware/userValidationMiddleware.js"
@@ -20,11 +20,15 @@ userRoutes.get("/protected-route", authenticateUser, (req, res) => {
     res.json({ message: "You have accessed a protected route!", user: req.user });
 });
 
-//        cart
-// userRoutes.delete("/cart/remove/:productID", verifyToken, removeFromCart); 
-// userRoutes.put("/cart/update/:productID", verifyToken, updateCartItemQuantity);
+//          cart
+userRoutes.delete("/cart/remove/:productID", verifyToken, removeFromCart); 
+userRoutes.put("/cart/update/:productID", verifyToken, updateCartItemQuantity);
 userRoutes.post("/cart/add", verifyToken, addToCart);
-// userRoutes.get("/cart", verifyToken, viewCart);
+userRoutes.get("/cart", verifyToken, viewCart);
+
+//          payment
+userRoutes.post("/payment/checkout", verifyToken, handlePayment);
+
 export default userRoutes;
 
 
