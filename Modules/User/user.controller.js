@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import { catchError } from "../../Middleware/catchError.js";
 import stripePackage from 'stripe';
 
-const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
+// const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 //          Login and Registeration
 
