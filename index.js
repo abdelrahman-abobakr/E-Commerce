@@ -18,6 +18,7 @@ const app = express();
 
 app.use(express.json());
 app.use(userRoutes);
+
 app.use(productRoutes);
 app.use(orderRoutes)
 app.use(adminRoutes);
