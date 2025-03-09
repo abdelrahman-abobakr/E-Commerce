@@ -1,5 +1,8 @@
 // controllers/paymentController.js
 import { createCustomer, createCharge } from '../../Database/Models/strip.model.js';
+import {userModel} from '../../Database/Models/user.model.js';
+import {orderModel} from '../../Database/Models/order.model.js';
+import {productModel} from '../../Database/Models/product.model.js';
 
 export const getHomePage = (req, res) => {
     const publishableKey = 'pk_test_51R0VHjKN8YEsXESQkgdcpYohfxpPRA5IMpukhAPRazByVr5eIkJ4j0XbVpAdLYpJ49ilikLF4eMF6DEbzc6KmQ7R00eFKF4Z31';
