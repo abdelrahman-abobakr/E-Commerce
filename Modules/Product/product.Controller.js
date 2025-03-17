@@ -6,7 +6,7 @@ import { catchError } from "../../Middleware/catchError.js";
 
 const createProduct = catchError(
     async (req, res) => {
-    
+        //req.body.createdBy = req.user._id;
         if(req.body.reviews){
             req.body.reviews.forEach(review => {
                 review.createdBy = req.user._id;  

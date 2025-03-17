@@ -11,18 +11,24 @@ import paymentRoutes from './Modules/Payment/strip.Route.js';
 import session from "express-session";
 import passport from "passport"; 
 import "./Config/passport.js";
+import reviewRouter from "./Modules/Reviews/review.Route.js";
+import cors from 'cors';
 
 const app = express();
 
 // ADD THIS LINE: Important - handle Stripe webhooks before JSON parsing
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
-
+app.use(cors());
 app.use(express.json());
 
+app.get('/api/data', (req, res) => {
+    res.json({ message: 'Hello from Node.js backend!' });
+});
+app.use(reviewRouter);
 app.use(paymentRoutes);
 app.use(userRoutes);
 app.use(productRoutes);
-app.use(orderRoutes)
+app.use(orderRoutes);
 app.use(adminRoutes);
 
 // Session Middleware (required for Passport)
