@@ -3,7 +3,7 @@ import { userModel } from "../../Database/Models/user.model.js";
 
 const getUsers = catchError(
     async (req, res)=>{
-        let allUsers = await userModel.find({role:'user'});
+        let allUsers = await userModel.find();
         if(allUsers){
             allUsers.map(user=>user.cart=undefined);
             res.status(200).json({message:"All Users", allUsers});
@@ -26,6 +26,20 @@ const deleteUser = catchError(
         }
     }
 );
+const getUser = catchError(
+    async (req, res) => {
+        const userId = req.params.id;
+        
+        const user = await userModel.findOne({ _id: userId });
+        if (user) {
+            user.password = undefined;
+            user.cart = undefined;
+            res.status(200).json({ message: "user found" , user});
+        } else {
+            res.status(401).json({ message: "not found user" });
+        }
+    }
+);
 const addUser = catchError(
     async (req,res)=>{
         let findUser = await userModel.findOne({ email: req.body.email });
@@ -41,5 +55,6 @@ const addUser = catchError(
 export{
     getUsers,
     deleteUser,
-    addUser
+    addUser,
+    getUser
 }
