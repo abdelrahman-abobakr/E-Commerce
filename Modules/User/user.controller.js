@@ -5,9 +5,9 @@ import { sendEmail } from "../../Email/email.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { catchError } from "../../Middleware/catchError.js";
-import stripePackage from 'stripe';
+// import stripePackage from 'stripe';
 
-const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
+// const stripe = stripePackage(process.env.STRIPE_SECRET_KEY);
 
 //          Login and Registeration
 
@@ -221,60 +221,60 @@ const removeFromCart = catchError(
     }
 );
 
-const handlePayment = catchError(
-    async (req, res) => {
-        const user = await userModel.findById(req.user._id);
+// const handlePayment = catchError(
+//     async (req, res) => {
+//         const user = await userModel.findById(req.user._id);
     
-        // Check if cart is empty
-        if (user.cart.items.length === 0) {
-            return res.status(400).json({ message: "Cart is empty" });
-        }
+//         // Check if cart is empty
+//         if (user.cart.items.length === 0) {
+//             return res.status(400).json({ message: "Cart is empty" });
+//         }
     
-        // Calculate total bill (from user's cart)
-        const totalBill = user.cart.totalBill;
+//         // Calculate total bill (from user's cart)
+//         const totalBill = user.cart.totalBill;
     
-        // Create a payment session with the payment gateway (Stripe)
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'], // Accept card payments
-            line_items: user.cart.items.map(item => ({
-                price_data: {
-                    currency: 'usd', // Currency
-                    product_data: {
-                        name: item.productID.name, // Product name (fetch from DB)
-                    },
-                    unit_amount: item.itemTotalPrice * 100, // Convert to cents
-                },
-                quantity: item.quantity, // Quantity of the product
-            })),
-            mode: 'payment', // One-time payment
-            success_url: 'https://yourwebsite.com/success', // Redirect on success
-            cancel_url: 'https://yourwebsite.com/cancel', // Redirect on cancel
-        });
+//         // Create a payment session with the payment gateway (Stripe)
+//         const session = await stripe.checkout.sessions.create({
+//             payment_method_types: ['card'], // Accept card payments
+//             line_items: user.cart.items.map(item => ({
+//                 price_data: {
+//                     currency: 'usd', // Currency
+//                     product_data: {
+//                         name: item.productID.name, // Product name (fetch from DB)
+//                     },
+//                     unit_amount: item.itemTotalPrice * 100, // Convert to cents
+//                 },
+//                 quantity: item.quantity, // Quantity of the product
+//             })),
+//             mode: 'payment', // One-time payment
+//             success_url: 'https://yourwebsite.com/success', // Redirect on success
+//             cancel_url: 'https://yourwebsite.com/cancel', // Redirect on cancel
+//         });
     
-        // On successful payment:
-        // 1. Create an order
-        const order = await orderModel.create({
-            customerId: user._id,
-            items: user.cart.items,
-            totalBill,
-        });
+//         // On successful payment:
+//         // 1. Create an order
+//         const order = await orderModel.create({
+//             customerId: user._id,
+//             items: user.cart.items,
+//             totalBill,
+//         });
     
-        // 2. Clear the cart
-        user.cart.items = [];
-        user.cart.totalBill = 0;
-        await user.save();
+//         // 2. Clear the cart
+//         user.cart.items = [];
+//         user.cart.totalBill = 0;
+//         await user.save();
     
-        // 3. Update product stock
-        for (const item of user.cart.items) {
-            await productModel.findByIdAndUpdate(item.productID, {
-                $inc: { stock: -item.quantity },
-            });
-        }
+//         // 3. Update product stock
+//         for (const item of user.cart.items) {
+//             await productModel.findByIdAndUpdate(item.productID, {
+//                 $inc: { stock: -item.quantity },
+//             });
+//         }
     
-        // Return the payment session URL to the frontend
-        res.status(200).json({ message: "Payment session created", sessionUrl: session.url });
-    }
-)
+//         // Return the payment session URL to the frontend
+//         res.status(200).json({ message: "Payment session created", sessionUrl: session.url });
+//     }
+// )
 
 
 
@@ -288,8 +288,8 @@ export {
     addToCart,
     viewCart,
     updateCartItemQuantity,
-    removeFromCart,
+    removeFromCart
 
-    handlePayment
+    // handlePayment
 
 };
