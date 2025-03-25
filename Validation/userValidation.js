@@ -28,14 +28,11 @@ const userSchema = joi.object({
             "string.empty":"password field is required"
         }),
 
-    phone:joi.array()
-        .items(joi.string()),
-
     role: joi.string()
         .valid("user", "admin")
         .default("user"),
 
-    isConfirmed: joi.boolean()
+    isVerified: joi.boolean()
         .default(false),
 
     cart: joi.object({
@@ -49,7 +46,7 @@ const userSchema = joi.object({
             )
             .default([]),
         totalBill: joi.number().default(0)
-    })
+    }).default({})
     
 });
 

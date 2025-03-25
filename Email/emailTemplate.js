@@ -1,6 +1,7 @@
 export function emailTemplate(email) {
 
-    return `
+return `
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
  <head>
@@ -78,17 +79,17 @@ a[x-apple-data-detectors],
  </head>
  <body class="body" style="width:100%;height:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
   <div dir="ltr" class="es-wrapper-color" lang="en" style="background-color:#D4E0F9"><!--[if gte mso 9]>
-			<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-				<v:fill type="tile" color="#D4E0F9"></v:fill>
-			</v:background>
-		<![endif]-->
+            <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+                <v:fill type="tile" color="#D4E0F9"></v:fill>
+            </v:background>
+        <![endif]-->
    <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#D4E0F9">
      <tr>
       <td valign="top" style="padding:0;Margin:0">
        <table cellpadding="0" cellspacing="0" align="center" class="es-header" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important;background-color:transparent;background-repeat:repeat;background-position:center top">
          <tr>
           <td align="center" style="padding:0;Margin:0">
-           <table bgcolor="#db583b" align="center" cellpadding="0" cellspacing="0" class="es-header-body" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#DB583B;width:600px">
+           <table bgcolor="#db583b" align="center" cellpadding="0" cellspacing="0" class="es-header-body" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#bcaaff;width:600px">
              <tr>
               <td align="left" style="Margin:0;padding-top:25px;padding-right:20px;padding-bottom:25px;padding-left:20px">
                <table cellpadding="0" cellspacing="0" width="100%" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
@@ -96,10 +97,10 @@ a[x-apple-data-detectors],
                   <td valign="top" align="center" class="es-m-p0r" style="padding:0;Margin:0;width:560px">
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td align="center" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="https://viewstripo.email" style="mso-line-height-rule:exactly;text-decoration:none;color:#FFFFFF;font-size:14px"><img src="https://ftnkeab.stripocdn.email/content/guids/CABINET_e0cced85f5d4b2f5d2951c165101f502/images/group.png" alt="Logo" width="69" title="Logo" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none"></a></td>
+                      <td align="center" style="padding:0;Margin:0;font-size:0px"><a target="_blank" href="https://viewstripo.email" style="mso-line-height-rule:exactly;text-decoration:none;color:#FFFFFF;font-size:14px"></a></td>
                      </tr>
                      <tr>
-                      <td align="center" style="padding:0;Margin:0;padding-top:30px"><h1 class="es-m-txt-c" style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:48px;font-style:normal;font-weight:bold;line-height:57.6px;color:#ffffff">Welcome To NoteApp</h1></td>
+                      <td align="center" style="padding:0;Margin:0;padding-top:30px"><h1 class="es-m-txt-c" style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:48px;font-style:normal;font-weight:bold;line-height:57.6px;color:#ffffff">Welcome To Shopify</h1></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -154,5 +155,6 @@ a[x-apple-data-detectors],
   </div>
  </body>
 </html>    
-    `
+
+`
 }

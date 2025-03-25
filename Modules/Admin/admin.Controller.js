@@ -1,12 +1,34 @@
 import { catchError } from "../../Middleware/catchError.js";
 import { userModel } from "../../Database/Models/user.model.js";
+import bcrypt from "bcrypt";
 
 const getUsers = catchError(
     async (req, res)=>{
-        let allUsers = await userModel.find();
+        // Step 1: Extract query parameters
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 20;
+        const skip = (page - 1) * limit;
+
+        let allUsers = await userModel.find()
+            .skip(skip)
+            .limit(limit);
+
+            
         if(allUsers){
-            allUsers.map(user=>user.cart=undefined);
-            res.status(200).json({message:"All Users", allUsers});
+            const totalUsers = await userModel.countDocuments();
+    
+            allUsers.forEach(user => {
+                user.password = undefined;
+                user.cart = undefined;
+            });
+            res.status(200).json({
+                message: "Users fetched successfully",
+                users: allUsers,
+                totalUsers,
+                currentPage: page,
+                totalPages: Math.ceil(totalUsers / limit), // Calculate total pages
+            });
+
         }else{
             res.json({message:"No Users Found!"});
         }
@@ -44,10 +66,11 @@ const addUser = catchError(
     async (req,res)=>{
         let findUser = await userModel.findOne({ email: req.body.email });
         if(!findUser){
+            req.body.password = bcrypt.hashSync(req.body.password, 8);
             let AddedUser= await userModel.insertMany(req.body);
             res.json({message: "user added successfully!"});
         }else{
-            res.json({message:"user already exists!"})
+            res.status(400).json({message:"user already exists!"})
         }
     }
 )

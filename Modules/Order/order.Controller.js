@@ -8,7 +8,10 @@ const getUserOrders = async (req, res) => {
     try {
        
         const customerId = req.params.id;
-        const userOrders = await orderModel.find({ customerId: customerId });
+        const userOrders = await orderModel.find({ customerId: customerId }).populate({
+            path: 'items.itemID', // Path to populate in the items array
+            select: 'name', // Select only the product title
+        });
 
         if (userOrders.length === 0) {
             return res.status(404).json({ message: "No orders found for this customer" });
