@@ -26,8 +26,6 @@ userRoutes.put("/cart/update/:productID", verifyToken, updateCartItemQuantity);
 userRoutes.post("/cart/add", verifyToken, addToCart);
 userRoutes.get("/cart", verifyToken, viewCart);
 
-//          payment
-// userRoutes.post("/payment/checkout", verifyToken, handlePayment);
 
 export default userRoutes;
 

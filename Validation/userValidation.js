@@ -1,6 +1,6 @@
 import joi from "joi";
 
-export const userSchema = joi.object({
+const userSchema = joi.object({
 
     name: joi.string()
         .min(3)
@@ -24,17 +24,15 @@ export const userSchema = joi.object({
         .pattern(new RegExp(/^[A-Za-z\d@$]{6,}$/))
         .required()
         .messages({
-            "string.pattern.base":"Not matching password format (capital and small letters, numbers, @ $ special characters and at length is at least 6 "
+            "string.pattern.base":"Not matching password format (capital and small letters, numbers, @ $ special characters and at length is at least 6 ",
+            "string.empty":"password field is required"
         }),
-
-    phone:joi.array()
-        .items(joi.string()),
 
     role: joi.string()
         .valid("user", "admin")
         .default("user"),
 
-    isConfirmed: joi.boolean()
+    isVerified: joi.boolean()
         .default(false),
 
     cart: joi.object({
@@ -48,6 +46,8 @@ export const userSchema = joi.object({
             )
             .default([]),
         totalBill: joi.number().default(0)
-    })
+    }).default({})
     
 });
+
+export default userSchema;

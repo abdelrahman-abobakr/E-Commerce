@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 
 
 const productSchema = Schema({
+    createdBy:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+     
+    },
     name: {
         type: String,
         trim: true,
