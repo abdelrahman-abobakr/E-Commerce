@@ -135,7 +135,11 @@ const addToCart = async (req, res) => {
 const viewCart = catchError(
     async (req,res)=>{
 
-        let currentUser = await userModel.findById(req.user._id);
+        let currentUser = await userModel.findById(req.user._id).populate({
+            path: "cart.items.productID", // Populate the product details
+            model: "Product", // Your product model name
+            select: "name price stock" // Select only the fields you need
+          });
 
         if (!currentUser) {
             return res.status(404).json({ message: "User not found" });
@@ -158,15 +162,12 @@ const updateCartItemQuantity = catchError(
 
         const user = await userModel.findById(req.user._id);
 
-        // Find the product in the user's cart
         const cartItem = user.cart.items.find(item => item.productID.equals(productID));
 
-        // Check if the product exists in the cart
         if (!cartItem) {
             return res.status(404).json({ message: "Product not found in cart" });
         }
 
-        // Find the product in the database to get the price
         const product = await productModel.findById(productID);
 
         if (!product || product.stock < quantity) {

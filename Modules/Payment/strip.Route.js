@@ -1,15 +1,3 @@
-// // routes/paymentRoutes.js
-// import express from 'express';
-// import {  handlePayment } from './strip.Controller.js';
-// import verifyToken from '../../Middleware/verifyToken.js';
-// const paymentRoutes = express.Router();
-
-// // paymentRoutes.get('/', getHomePage);
-// // paymentRoutes.post('/payment', handlePayment);
-// paymentRoutes.post('/payment/checkout', verifyToken, handlePayment);
-
-// export default paymentRoutes;
-
 import express from 'express';
 import { createCheckoutSession, handleSuccess, handleCancel, handleWebhook } from './strip.Controller.js';
 import verifyToken from '../../Middleware/verifyToken.js';

@@ -95,7 +95,6 @@ export const handleSuccess = async (req, res) => {
             res.status(200).json({ 
                 success: true, 
                 message: "Payment successful", 
-                order: order._id 
             });
         } else {
             res.status(400).json({ success: false, message: "Payment not completed" });
