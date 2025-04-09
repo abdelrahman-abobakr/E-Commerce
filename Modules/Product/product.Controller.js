@@ -42,6 +42,7 @@ const getAllProduct = catchError(
     async (req, res) => {
         
         const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10; // Added limit handling
         const skip = (page - 1) * limit; 
 
        
